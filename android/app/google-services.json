@@ -1,0 +1,215 @@
+{
+  "project_info": {
+    "project_number": "211366807960",
+    "firebase_url": "https://nano-banana22222-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "nano-banana22222",
+    "storage_bucket": "nano-banana22222.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:211366807960:android:91446d227db50a49ff03ed",
+        "android_client_info": {
+          "package_name": "com.jessica.nanobanana"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "211366807960-6mr21vakbia7uqt0605ujuqjof6i9ca4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jessica.nanobanana",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "211366807960-agim1soes2iavcccvdk7646cpeomgter.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jessica.nanobanana",
+            "certificate_hash": "125cde9ad6c9f52cf49a0b4ae4dcd272758f171a"
+          }
+        },
+        {
+          "client_id": "211366807960-caqtajl17rnad7ok97pk2kk8f9sk3jaa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jessica.nanobanana",
+            "certificate_hash": "01ac3dd870bc7e80684c581248e9ac89a08444ab"
+          }
+        },
+        {
+          "client_id": "211366807960-gk53dq0l3ik7rfuerm60d80oipa74ecd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jessica.nanobanana",
+            "certificate_hash": "446ce3546564d1f98f04b668fa24b29b62f72376"
+          }
+        },
+        {
+          "client_id": "211366807960-gtp70j9e6ld8ktrc0kf5185idoh5fron.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jessica.nanobanana",
+            "certificate_hash": "1a366adb3fe42da2452cc758700d991b6369bb1f"
+          }
+        },
+        {
+          "client_id": "211366807960-qa04psv97onviminc4rlmmk30b7rfk4s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jessica.nanobanana",
+            "certificate_hash": "84e60420565ce28cad64b8a994271fade3acf2ee"
+          }
+        },
+        {
+          "client_id": "211366807960-frt2hp1kvcrqhnjf74rh4f5ln1rd7eu7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBtzo3GV3h59M6ZGGXZ9HpK2052be1Fi_8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "211366807960-frt2hp1kvcrqhnjf74rh4f5ln1rd7eu7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "211366807960-m2tit4f0m2e6h8ealfejv0vsde4dmhd6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.jessica.nanobanana"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:211366807960:android:838fd5a91308438cff03ed",
+        "android_client_info": {
+          "package_name": "com.mypikaapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "211366807960-chkovaqje5phoedi1rmes69bfp636t4i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mypikaapp",
+            "certificate_hash": "125cde9ad6c9f52cf49a0b4ae4dcd272758f171a"
+          }
+        },
+        {
+          "client_id": "211366807960-gisl8lhvrakcu82dgh8oormjm8iqj2ac.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mypikaapp",
+            "certificate_hash": "751311e978a4e0de1b143d675fe3a24ee3b86318"
+          }
+        },
+        {
+          "client_id": "211366807960-jcat2ufe7jqk40nk7um3bu23ijk5rr2f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mypikaapp",
+            "certificate_hash": "84e60420565ce28cad64b8a994271fade3acf2ee"
+          }
+        },
+        {
+          "client_id": "211366807960-om7fco6njovlln34g5172ermgjdcfph9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mypikaapp",
+            "certificate_hash": "b25cd45c71c4b76c5089f8b3b821e2104447e4c3"
+          }
+        },
+        {
+          "client_id": "211366807960-s3koamellddg3mb8q4c3p28p1sc931ua.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mypikaapp",
+            "certificate_hash": "1a366adb3fe42da2452cc758700d991b6369bb1f"
+          }
+        },
+        {
+          "client_id": "211366807960-uloqqtlfu8jukv998832gmt6i070jpl4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mypikaapp",
+            "certificate_hash": "01ac3dd870bc7e80684c581248e9ac89a08444ab"
+          }
+        },
+        {
+          "client_id": "211366807960-frt2hp1kvcrqhnjf74rh4f5ln1rd7eu7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBtzo3GV3h59M6ZGGXZ9HpK2052be1Fi_8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "211366807960-frt2hp1kvcrqhnjf74rh4f5ln1rd7eu7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "211366807960-m2tit4f0m2e6h8ealfejv0vsde4dmhd6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.jessica.nanobanana"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:211366807960:android:841b478890fd80d4ff03ed",
+        "android_client_info": {
+          "package_name": "com.shortbuild.short_build_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "211366807960-frt2hp1kvcrqhnjf74rh4f5ln1rd7eu7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBtzo3GV3h59M6ZGGXZ9HpK2052be1Fi_8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "211366807960-frt2hp1kvcrqhnjf74rh4f5ln1rd7eu7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "211366807960-m2tit4f0m2e6h8ealfejv0vsde4dmhd6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.jessica.nanobanana"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,47 @@
+name: short_build_app
+description: "AI Shorts 자동 생성 앱 - 텍스트 입력만으로 바이럴 쇼츠 비디오 자동 생성"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.8.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+
+  # Firebase
+  firebase_core: ^3.6.0
+  firebase_auth: ^5.3.1
+  cloud_firestore: ^5.4.4
+  firebase_storage: ^12.3.4
+
+  # Auth
+  google_sign_in: ^6.2.2
+
+  # State management
+  provider: ^6.1.1
+  shared_preferences: ^2.2.2
+
+  # Network
+  http: ^1.1.0
+
+  # Media
+  video_player: ^2.8.1
+  cached_network_image: ^3.3.0
+  share_plus: ^7.2.1
+  path_provider: ^2.1.1
+
+  # Utils
+  url_launcher: ^6.2.1
+  intl: ^0.20.2
+  uuid: ^4.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
