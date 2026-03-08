@@ -18,6 +18,9 @@ class Constants {
   // fal.ai text-to-video 모델 (Grok Imagine Video — 음성 자동 포함, 저렴)
   static const String falTextToVideoModel = 'xai/grok-imagine-video/text-to-video';
 
+  // fal.ai image-to-video 모델
+  static const String falImageToVideoModel = 'fal-ai/kling-video/v1/standard/image-to-video';
+
   // 크레딧 비용
   static const double scriptCreditCost = 1.0;   // 스크립트 생성
   static const double videoCreditCost = 2.0;     // 씬당 비디오 생성

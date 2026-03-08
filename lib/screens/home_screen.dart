@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../providers/shorts_provider.dart';
+import '../models/template_data.dart';
 import 'script_screen.dart';
 import 'login_screen.dart';
 
@@ -15,6 +16,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final _topicController = TextEditingController();
   int _sceneCount = 3;
+  String? _selectedCategoryId;
 
   @override
   void dispose() {
@@ -251,38 +253,93 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                   const SizedBox(height: 16),
-                  // 예시 칩
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: [
-                      '고양이 댄스 비디오 🐱',
-                      '사이버펑크 서울 거리 🌃',
-                      '환상적인 마법의 숲 🧚',
-                      '화성에서의 눈부신 일출 🪐',
-                    ].map((tag) => GestureDetector(
-                      onTap: () {
-                        _topicController.text = tag;
-                        FocusScope.of(context).unfocus(); // 키보드 내리기
-                        _onGenerate();
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF6C63FF).withOpacity(0.15),
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                              color: const Color(0xFF6C63FF).withOpacity(0.4)),
-                        ),
-                        child: Text(tag,
-                            style: const TextStyle(
-                                color: Color(0xFF6C63FF),
+                  // 카테고리 바
+                  const Text('템플릿으로 빠르게 시작',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600)),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    height: 36,
+                    child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: TemplateData.categories.length,
+                      separatorBuilder: (_, __) => const SizedBox(width: 8),
+                      itemBuilder: (context, index) {
+                        final cat = TemplateData.categories[index];
+                        final selected = _selectedCategoryId == cat.id;
+                        return GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _selectedCategoryId = selected ? null : cat.id;
+                            });
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 14, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: selected
+                                  ? const Color(0xFF6C63FF)
+                                  : const Color(0xFF6C63FF).withOpacity(0.15),
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                  color: const Color(0xFF6C63FF)
+                                      .withOpacity(selected ? 1.0 : 0.4)),
+                            ),
+                            child: Text(
+                              '${cat.emoji} ${cat.name}',
+                              style: TextStyle(
+                                color: selected
+                                    ? Colors.white
+                                    : const Color(0xFF6C63FF),
                                 fontSize: 12,
-                                fontWeight: FontWeight.w600)),
-                      ),
-                    )).toList(),
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   ),
+                  // 템플릿 목록
+                  if (_selectedCategoryId != null) ...[
+                    const SizedBox(height: 12),
+                    ...TemplateData.categories
+                        .firstWhere((c) => c.id == _selectedCategoryId)
+                        .templates
+                        .map((tmpl) => Padding(
+                              padding: const EdgeInsets.only(bottom: 8),
+                              child: GestureDetector(
+                                onTap: () {
+                                  _topicController.text = tmpl.topic;
+                                  setState(() => _sceneCount = tmpl.suggestedScenes);
+                                  FocusScope.of(context).unfocus();
+                                  _onGenerate();
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(14),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFF1E1E1E),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(tmpl.label,
+                                            style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w500)),
+                                      ),
+                                      Icon(Icons.arrow_forward_ios_rounded,
+                                          color: Colors.grey[600], size: 14),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            )),
+                  ],
                   const SizedBox(height: 20),
                   // 생성 버튼
                   SizedBox(

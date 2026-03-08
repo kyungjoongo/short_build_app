@@ -4,6 +4,7 @@ class SceneScript {
   final String caption;       // 화면에 표시할 자막
   final String narration;     // 보이스오버 텍스트
   String? videoUrl;           // 생성 후 채워짐
+  String? imagePath;          // 첨부된 이미지 경로 (런타임 전용)
 
   SceneScript({
     required this.number,
@@ -11,6 +12,7 @@ class SceneScript {
     required this.caption,
     required this.narration,
     this.videoUrl,
+    this.imagePath,
   });
 
   SceneScript copyWith({
@@ -18,6 +20,7 @@ class SceneScript {
     String? caption,
     String? narration,
     String? videoUrl,
+    String? imagePath,
   }) {
     return SceneScript(
       number: number,
@@ -25,6 +28,7 @@ class SceneScript {
       caption: caption ?? this.caption,
       narration: narration ?? this.narration,
       videoUrl: videoUrl ?? this.videoUrl,
+      imagePath: imagePath ?? this.imagePath,
     );
   }
 

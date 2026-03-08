@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:http/http.dart' as http;
@@ -83,6 +84,49 @@ class VideoService {
     final metadata = SettableMetadata(contentType: 'video/mp4');
     final task = await ref.putData(bytes, metadata);
     return await task.ref.getDownloadURL();
+  }
+
+  // 로컬 이미지를 Firebase Storage에 업로드하여 public URL 반환 (fal.ai용)
+  Future<String> uploadImageForFal(File imageFile) async {
+    final bytes = await imageFile.readAsBytes();
+    final fileName = 'temp_input_${DateTime.now().millisecondsSinceEpoch}.jpg';
+    final ref = FirebaseStorage.instance
+        .ref()
+        .child('temp-inputs')
+        .child(fileName);
+    final metadata = SettableMetadata(contentType: 'image/jpeg');
+    final task = await ref.putData(bytes, metadata);
+    return await task.ref.getDownloadURL();
+  }
+
+  // fal.ai image-to-video 생성 (이미지 + 프롬프트 → 비디오)
+  Future<Map<String, dynamic>> generateVideoFromImage(
+    String prompt,
+    String imageUrl, {
+    int duration = 5,
+  }) async {
+    final modelPath = Constants.falImageToVideoModel;
+    final url = '$_falBase/$modelPath';
+
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {
+        'Authorization': 'Key ${Constants.falApiToken}',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+        'prompt': '$prompt. Cinematic quality, short clip.',
+        'image_url': imageUrl,
+        'aspect_ratio': '9:16',
+        'duration': duration,
+      }),
+    );
+
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      throw Exception('fal.ai image-to-video error: ${response.statusCode} ${response.body}');
+    }
+
+    return jsonDecode(response.body) as Map<String, dynamic>;
   }
 
   // 파일명 생성

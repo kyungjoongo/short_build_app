@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import '../models/short_script.dart';
 import '../services/script_service.dart';
@@ -17,6 +18,7 @@ class ShortsProvider extends ChangeNotifier {
   int _currentSceneIndex = 0;
   String? _errorMessage;
   List<ShortScript> _history = [];
+  String? _personModelImagePath;
 
   // Getters
   ShortsState get state => _state;
@@ -24,6 +26,7 @@ class ShortsProvider extends ChangeNotifier {
   int get currentSceneIndex => _currentSceneIndex;
   String? get errorMessage => _errorMessage;
   List<ShortScript> get history => _history;
+  String? get personModelImagePath => _personModelImagePath;
   bool get isGeneratingScript => _state == ShortsState.generatingScript;
   bool get isGeneratingVideo => _state == ShortsState.generatingVideo;
   bool get isDone => _state == ShortsState.done;
@@ -68,7 +71,9 @@ class ShortsProvider extends ChangeNotifier {
         notifyListeners();
 
         final scene = _currentScript!.scenes[i];
-        final videoUrl = await _generateOneScene(scene.visualPrompt, i + 1, duration: duration);
+        // 우선순위: 씬 이미지 > 인물 모델 이미지 > 텍스트 전용
+        final effectiveImagePath = scene.imagePath ?? _personModelImagePath;
+        final videoUrl = await _generateOneScene(scene.visualPrompt, i + 1, duration: duration, imagePath: effectiveImagePath);
         _currentScript!.scenes[i].videoUrl = videoUrl;
         notifyListeners();
       }
@@ -90,9 +95,16 @@ class ShortsProvider extends ChangeNotifier {
     }
   }
 
-  Future<String> _generateOneScene(String prompt, int sceneNum, {int duration = 5}) async {
+  Future<String> _generateOneScene(String prompt, int sceneNum, {int duration = 5, String? imagePath}) async {
     // 1. fal.ai에 요청 제출
-    final result = await _videoService.generateVideoFromText(prompt, duration: duration);
+    Map<String, dynamic> result;
+    if (imagePath != null) {
+      final imageFile = File(imagePath);
+      final imageUrl = await _videoService.uploadImageForFal(imageFile);
+      result = await _videoService.generateVideoFromImage(prompt, imageUrl, duration: duration);
+    } else {
+      result = await _videoService.generateVideoFromText(prompt, duration: duration);
+    }
 
     final requestId = result['request_id'] as String?;
     final statusUrl = result['status_url'] as String?;
@@ -134,6 +146,39 @@ class ShortsProvider extends ChangeNotifier {
     throw Exception('No video URL in result: $result');
   }
 
+  // ─── 이미지 첨부 ──────────────────────────────────────
+  void attachImageToScene(int index, String? imagePath) {
+    if (_currentScript == null || index >= _currentScript!.scenes.length) return;
+    final scene = _currentScript!.scenes[index];
+    _currentScript!.scenes[index] = scene.copyWith(imagePath: imagePath);
+    notifyListeners();
+  }
+
+  void clearImageFromScene(int index) {
+    if (_currentScript == null || index >= _currentScript!.scenes.length) return;
+    final scene = _currentScript!.scenes[index];
+    _currentScript!.scenes[index] = SceneScript(
+      number: scene.number,
+      visualPrompt: scene.visualPrompt,
+      caption: scene.caption,
+      narration: scene.narration,
+      videoUrl: scene.videoUrl,
+      imagePath: null,
+    );
+    notifyListeners();
+  }
+
+  // ─── 인물 모델 ──────────────────────────────────────
+  void setPersonModelImage(String? path) {
+    _personModelImagePath = path;
+    notifyListeners();
+  }
+
+  void clearPersonModelImage() {
+    _personModelImagePath = null;
+    notifyListeners();
+  }
+
   // ─── 씬 편집 ──────────────────────────────────────────
   void editScene(int index, {String? caption, String? visualPrompt}) {
     if (_currentScript == null || index >= _currentScript!.scenes.length) return;
@@ -150,6 +195,7 @@ class ShortsProvider extends ChangeNotifier {
     _currentScript = null;
     _currentSceneIndex = 0;
     _errorMessage = null;
+    _personModelImagePath = null;
     notifyListeners();
   }
 }

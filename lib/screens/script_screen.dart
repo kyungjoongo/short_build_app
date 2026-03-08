@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import '../providers/shorts_provider.dart';
 import '../providers/auth_provider.dart';
@@ -14,6 +16,33 @@ class ScriptScreen extends StatefulWidget {
 
 class _ScriptScreenState extends State<ScriptScreen> {
   int _selectedDuration = 5;
+  final _imagePicker = ImagePicker();
+
+  Future<void> _pickImageForScene(int sceneIndex) async {
+    final picked = await _imagePicker.pickImage(
+      source: ImageSource.gallery,
+      maxWidth: 1920,
+      maxHeight: 1080,
+      imageQuality: 85,
+    );
+    if (picked == null || !mounted) return;
+    context.read<ShortsProvider>().attachImageToScene(sceneIndex, picked.path);
+  }
+
+  void _clearImageForScene(int sceneIndex) {
+    context.read<ShortsProvider>().clearImageFromScene(sceneIndex);
+  }
+
+  Future<void> _pickPersonModelImage() async {
+    final picked = await _imagePicker.pickImage(
+      source: ImageSource.gallery,
+      maxWidth: 1920,
+      maxHeight: 1080,
+      imageQuality: 85,
+    );
+    if (picked == null || !mounted) return;
+    context.read<ShortsProvider>().setPersonModelImage(picked.path);
+  }
 
   Future<void> _onGenerateVideos() async {
     final auth = context.read<AuthProvider>();
@@ -135,6 +164,105 @@ class _ScriptScreenState extends State<ScriptScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
+                  // 인물 모델 선택 섹션
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF1E1E1E),
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(
+                        color: provider.personModelImagePath != null
+                            ? const Color(0xFFFF6584).withOpacity(0.5)
+                            : Colors.transparent,
+                      ),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            const Icon(Icons.person_pin_rounded,
+                                color: Color(0xFFFF6584), size: 20),
+                            const SizedBox(width: 8),
+                            const Text('모델 선택',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600)),
+                            const Spacer(),
+                            if (provider.personModelImagePath != null)
+                              GestureDetector(
+                                onTap: () => provider.clearPersonModelImage(),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: Colors.red.withOpacity(0.15),
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                  child: const Text('제거',
+                                      style: TextStyle(
+                                          color: Colors.red, fontSize: 11)),
+                                ),
+                              ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          '인물 사진을 업로드하면 모든 씬에 해당 인물이 등장합니다',
+                          style: TextStyle(color: Colors.grey[500], fontSize: 11),
+                        ),
+                        const SizedBox(height: 12),
+                        if (provider.personModelImagePath != null) ...[
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.file(
+                              File(provider.personModelImagePath!),
+                              height: 120,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          const Center(
+                            child: Text('인물 모델 설정됨',
+                                style: TextStyle(
+                                    color: Color(0xFFFF6584),
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600)),
+                          ),
+                        ] else
+                          GestureDetector(
+                            onTap: provider.isGeneratingVideo
+                                ? null
+                                : _pickPersonModelImage,
+                            child: Container(
+                              width: double.infinity,
+                              height: 80,
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF0F0F0F),
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(color: Colors.grey[700]!),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.add_a_photo_outlined,
+                                      color: Colors.grey[500], size: 24),
+                                  const SizedBox(height: 6),
+                                  Text('인물 사진 업로드',
+                                      style: TextStyle(
+                                          color: Colors.grey[500],
+                                          fontSize: 12)),
+                                ],
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
                   const Text('씬 구성',
                       style: TextStyle(
                           color: Colors.white,
@@ -212,6 +340,105 @@ class _ScriptScreenState extends State<ScriptScreen> {
                                 label: 'AI 프롬프트',
                                 text: scene.visualPrompt,
                                 dimmed: true),
+                            const SizedBox(height: 10),
+                            // 이미지 첨부
+                            GestureDetector(
+                              onTap: provider.isGeneratingVideo
+                                  ? null
+                                  : () => _pickImageForScene(i),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 8),
+                                decoration: BoxDecoration(
+                                  color: scene.imagePath != null
+                                      ? const Color(0xFF6C63FF)
+                                          .withOpacity(0.2)
+                                      : const Color(0xFF0F0F0F),
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                    color: scene.imagePath != null
+                                        ? const Color(0xFF6C63FF)
+                                        : Colors.grey[700]!,
+                                  ),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      scene.imagePath != null
+                                          ? Icons.image_rounded
+                                          : Icons.add_photo_alternate_outlined,
+                                      color: scene.imagePath != null
+                                          ? const Color(0xFF6C63FF)
+                                          : Colors.grey[500],
+                                      size: 18,
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: Text(
+                                        scene.imagePath != null
+                                            ? '이미지 첨부됨'
+                                            : '이미지 첨부 (선택)',
+                                        style: TextStyle(
+                                          color: scene.imagePath != null
+                                              ? const Color(0xFF6C63FF)
+                                              : Colors.grey[500],
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                    if (scene.imagePath != null)
+                                      GestureDetector(
+                                        onTap: () => _clearImageForScene(i),
+                                        child: const Icon(Icons.close_rounded,
+                                            color: Colors.grey, size: 16),
+                                      ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            if (scene.imagePath != null)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Image.file(
+                                    File(scene.imagePath!),
+                                    height: 80,
+                                    width: double.infinity,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                            // 인물 모델 적용 배지
+                            if (provider.personModelImagePath != null &&
+                                scene.imagePath == null &&
+                                !isDone)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color:
+                                        const Color(0xFFFF6584).withOpacity(0.15),
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Icon(Icons.person_pin_rounded,
+                                          color: Color(0xFFFF6584), size: 12),
+                                      const SizedBox(width: 4),
+                                      const Text('모델 사진 적용됨',
+                                          style: TextStyle(
+                                              color: Color(0xFFFF6584),
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.w600)),
+                                    ],
+                                  ),
+                                ),
+                              ),
                           ],
                         ),
                       ),
